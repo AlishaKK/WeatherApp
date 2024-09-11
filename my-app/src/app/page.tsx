@@ -25,11 +25,39 @@ export default function Home() {
       console.error("Error fetching data:", error);
     }
   }
-useEffect(()=>{
-  fetchData("Lahore")
-},[])
+  async function fetchDataByCoordinates(latitude:string, longitude:string) {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/weather?lat=${latitude}&lon=${longitude}`
+      );
+      const jsonData = (await response.json()).data;
+      setWeatherData(jsonData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          fetchDataByCoordinates(latitude, longitude);
+        },
+        (error) => {
+          console.error("Error getting geolocation:", error);
+        }
+      );
+    }
+  }, []);
+
+
   return (
+    <>
+    
 <main className="flex justify-center p-4 bg-gray-100 h-[28rem]">
+  <div className="flex flex-col">
+<h2 className="text-center font-semibold text-teal-400 text-4xl m-4 ">Weather App</h2>
   <article className="bg-white rounded-lg shadow-lg p-4 w-96">
     <form
       className="flex flex-col space-y-4"
@@ -47,7 +75,7 @@ useEffect(()=>{
         onChange={(e) => setCity(e.target.value)}
       />
       <button
-        className="search_button bg-blue-500  hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xs"
+        className="search_button bg-teal-500  hover:bg-teal-400 text-white font-bold py-2 px-4 rounded-1xl"
         type="submit"
       >
         Search
@@ -100,6 +128,8 @@ useEffect(()=>{
       <div className="place text-lg font-bold mt-2">Loading...</div>
     )}
   </article>
+  </div>
 </main>
+</>
   );
 }
