@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 //localhost:3000/api/weather
-export async function GET(request: NextRequest) {
+export async function GET(request:NextRequest) {
   const { searchParams } = new URL(request.url);
   const address = searchParams.get("address");
   const latitude = searchParams.get("lat");
