@@ -1,12 +1,24 @@
 "use client"
 import "./page.modules.css";
 import { useEffect, useState, } from "react";
+
 function getCurrentDate() {
   const currentDate = new Date();
-  const options = { month: "long" };
-  const monthName = currentDate.toLocaleString("en-US", options);
-  const date = new Date().getDate() + ", " + monthName;
-  return date;
+  const options = { 
+    month: "short", // shortened month name (e.g. Sep)
+    day: "numeric", // day of the month (e.g. 13)
+    year: "numeric" // full year (e.g. 2024)
+  };
+  const timeOptions = { 
+    hour: "2-digit", // hour in 12-hour format
+    minute: "2-digit", // minute
+    hour12: true // adds AM/PM
+  };
+
+  const dateString = currentDate.toLocaleString("en-US", options);
+  const timeString = currentDate.toLocaleString("en-US", timeOptions);
+
+  return `${dateString}, ${timeString}`;
 }
 export default function Home() {
   const date = getCurrentDate();
@@ -55,10 +67,10 @@ export default function Home() {
   return (
     <>
     
-<main className="flex justify-center p-4 bg-gray-100 h-[28rem]">
+<main className="flex justify-center p-4 bg-gray-100 h-screen">
   <div className="flex flex-col">
 <h2 className="text-center font-semibold text-teal-400 text-4xl m-4 ">Weather App</h2>
-  <article className="bg-white rounded-lg shadow-lg p-4 w-96">
+  <article className="bg-white rounded-lg shadow-lg p-4  h-[28rem] w-96">
     <form
       className="flex flex-col space-y-4"
       onSubmit={(e) => {
@@ -112,7 +124,7 @@ export default function Home() {
         <div className="place text-lg font-bold mt-2">
           {weatherData?.name}
         </div>
-        <div className="date text-lg mt-2">{date}</div>
+        <div className="date text-lg mt-2 font-medium text-teal-400">{date}</div>
         <div className="weatherDetails mt-4">
           <div className="humidity flex justify-between">
             <span className="font-medium">Humidity:</span>
